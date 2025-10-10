@@ -1,0 +1,12 @@
+# Rust build
+wasm/target/
+wasm/pkg/
+
+# --- Editor / system files ---
+.DS_Store
+.idea/
+.vscode/
+
+# --- Log / cache ---
+*.log
+node_modules/

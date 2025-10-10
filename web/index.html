@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Rust WASM Image</title></head>
+<body>
+  <h1>Rust WASM Image</h1>
+  <input type="file" id="file" accept="image/*">
+  <label>Width <input id="width" type="number" value="800"></label>
+  <label><input id="gray" type="checkbox"> Grayscale</label>
+  <button id="run">Process</button>
+  <img id="preview" style="max-width:90%;"/>
+
+  <script type="module">
+    import init, { process_image } from "/pkg/wasm_image.js";
+    await init();
+
+    const f = id => document.getElementById(id);
+    f("run").onclick = async () => {
+      const file = f("file").files?.[0];
+      if (!file) return alert("Choose an image");
+
+      const buf = new Uint8Array(await file.arrayBuffer());
+      const width = parseInt(f("width").value || "0");
+      const gray = f("gray").checked;
+
+      const out = process_image(buf, width, gray);
+      const blob = new Blob([out], { type: "image/png" });
+      f("preview").src = URL.createObjectURL(blob);
+    };
+  </script>
+</body>
+</html>
