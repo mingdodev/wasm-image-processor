@@ -10,6 +10,7 @@ crate-type = ["cdylib"]
 wasm-bindgen = "0.2"
 photon-rs = "0.3"
 console_error_panic_hook = "0.1"
+image = { version = "0.24", default-features = false, features = ["png"] }
 
 [profile.release]
 opt-level = "z"
