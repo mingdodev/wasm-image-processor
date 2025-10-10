@@ -1,6 +1,6 @@
 # Rust build
 wasm/target/
-wasm/pkg/
+web/pkg/
 
 # --- Editor / system files ---
 .DS_Store
