@@ -2,6 +2,9 @@
 web/wasm/target/
 web/pkg/
 
+# Volume files
+api/data/images/
+
 # --- Editor / system files ---
 .DS_Store
 .idea/
