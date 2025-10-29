@@ -1,5 +1,5 @@
 # Rust build
-wasm/target/
+web/wasm/target/
 web/pkg/
 
 # --- Editor / system files ---
