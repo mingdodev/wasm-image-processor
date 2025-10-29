@@ -13,7 +13,7 @@ RUN wasm-pack build --target web --release --out-dir /app/web/pkg
 # ---- Runtime ----
 FROM nginx:alpine AS runtime
 
-COPY web/index.html /usr/share/nginx/html/index.html
+COPY index.html /usr/share/nginx/html/index.html
 COPY --from=build /app/web/pkg /usr/share/nginx/html/pkg
 
 EXPOSE 80
