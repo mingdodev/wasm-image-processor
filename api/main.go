@@ -58,6 +58,8 @@ func imagesHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleList(w http.ResponseWriter, r *http.Request) {
+	log.Println("GET /images called")
+
 	files, err := os.ReadDir(storageDir)
 	if err != nil {
 		http.Error(w, "Failed to read storage directory", http.StatusInternalServerError)
@@ -91,6 +93,8 @@ func handleList(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleUpload(w http.ResponseWriter, r *http.Request) {
+	log.Println("POST /images called")
+
 	r.Body = http.MaxBytesReader(w, r.Body, int64(maxUploadSize<<20))
 	if err := r.ParseMultipartForm(int64(maxUploadSize << 20)); err != nil {
 		http.Error(w, "File too large", http.StatusBadRequest)
