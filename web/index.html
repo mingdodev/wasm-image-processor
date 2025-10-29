@@ -10,15 +10,39 @@
   <label>Width(px) <input id="width" type="number" value="800"></label>
   <label><input id="gray" type="checkbox"> Grayscale</label>
   <button id="run">Process</button>
+  <button id="upload">Upload</button>
   <br/>
   <br/>
   <img id="preview" style="max-width:40%;"/>
+  <div id="gallery" style="margin-top: 20px; display: flex; flex-wrap: wrap;"></div>
 
   <script type="module">
     import init, { process_image } from "./pkg/wasm_image.js";
     await init();
 
+    const API_URL = "http://localhost:8080";
     const $ = id => document.getElementById(id);
+
+    async function loadImages() {
+      try {
+        const res = await fetch(`${API_URL}/images`);
+        if (!res.ok) throw new Error(`이미지 목록을 불러오지 못하였습니다. : ${res.status}`);
+        const images = await res.json();
+
+        const gallery = $("gallery");
+        gallery.innerHTML = "";
+
+        images.forEach(img => {
+          const imagElement = document.createElement("img");
+          imagElement.src = `${API_URL}/files/${img.id}`;
+          imagElement.style.maxWidth = "10%";
+          imagElement.style.margin = "5px";
+          gallery.appendChild(imagElement);
+      })
+    } catch (e) {
+        console.error(e);
+      }
+    }
 
     async function handleProcess() {
       const file = $("file").files?.[0];
@@ -37,14 +61,38 @@
 
         // PNG Blob 생성 및 미리보기
         const blob = new Blob([out], { type: "image/png" });
-        $("preview").src = URL.createObjectURL(blob);
+        const preview = $("preview")
+        preview.src = URL.createObjectURL(blob);
+        preview._blob = blob;
       } catch (e) {
         console.error(e);
         alert(`처리 실패: ${e?.message ?? e}`);
       }
     }
 
+    async function handleUpload() {
+      const blob = $("preview")._blob;
+      if (!blob) return alert("업로드할 이미지가 없습니다. 먼저 이미지를 처리하세요.");
+
+      const formData = new FormData();
+      formData.append("file", blob, "processed.png");
+
+      try {
+        const res = await fetch(`${API_URL}/images`, {
+          method: "POST",
+          body: formData,
+        });
+        if (!res.ok) throw new Error("이미지 업로드에 실패했습니다.");
+        alert("이미지 업로드 완료!");
+        await loadImages();
+      } catch (e) {
+        alert(`이미지 업로드에 실패했습니다.: ${e?.message ?? e}`);
+      }
+    }
     $("run").onclick = handleProcess;
+    $("upload").onclick = handleUpload;
+
+    await loadImages();
   </script>
 </body>
 </html>
