@@ -1,0 +1,14 @@
+services:
+  web:
+    image: mingdodev/wasm-image-processor:2.0
+    ports:
+      - "8081:80"
+    depends_on:
+      - api
+  
+  api:
+    image: mingdodev/wasm-image-api:1.0
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./api/data/images:/app/data/images
