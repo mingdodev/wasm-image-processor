@@ -79,7 +79,7 @@ minikube service web --url
 
 ### 이미지 저장 (Persistent Volume)
 
-API Pod는 이미지 파일을 **PersistentVolumeClaim(PVC)**에 저장합니다.  
+API Pod는 이미지 파일을 <strong>PersistentVolumeClaim(PVC)</strong>에 저장합니다.  
 PVC는 파드의 생명주기와 독립적이므로, 파드가 재시작되더라도 저장된 이미지는 유지됩니다.
 
 <br>
